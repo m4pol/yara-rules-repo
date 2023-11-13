@@ -35,17 +35,17 @@ rule Qbot_Botnet_ELF {
                 $x15 = { 73 65 6E 64 ?? 76 68 ?? 79 70 61 73 73 ?? ?? }
                 $x16 = { 4F 56 48 ?? ?? ?? }
 
-                $da1 = { 7d ff ff eb } //killer function call
-                $da2 = { e1 ff ff eb } //kill_main function call
-                $da3 = { d4 02 00 eb } //parser function call
-                $da4 = { c7 44 ?4 28 d4 6f 05 08 } //suspect hex value initialize 1
-                $da5 = { c7 44 ?4 20 e0 70 05 08 } //suspect hex value initialize 2
-                $da6 = { c7 44 ?4 28 e0 71 05 08 } //suspect hex value initialize 3
-                $da7 = { c7 44 ?4 28 d4 6f 05 08 } //suspect hex value initialize 4
+                $bc1 = { 7d ff ff eb } //killer function call
+                $bc2 = { e1 ff ff eb } //kill_main function call
+                $bc3 = { d4 02 00 eb } //parser function call
+                $bc4 = { c7 44 ?4 28 d4 6f 05 08 } //suspect hex value initialize 1
+                $bc5 = { c7 44 ?4 20 e0 70 05 08 } //suspect hex value initialize 2
+                $bc6 = { c7 44 ?4 28 e0 71 05 08 } //suspect hex value initialize 3
+                $bc7 = { c7 44 ?4 28 d4 6f 05 08 } //suspect hex value initialize 4
 
         condition:
                 uint32(0) == 0x464C457F and filesize < 350KB and (
                         (($s1 or $s2) and $s5 and $s9) and
-                        (3 of ($s3, $s4, $s6, $s7, $s8, $s10, $s11) or any of ($da*)) or any of ($x*)
+                        (3 of ($s3, $s4, $s6, $s7, $s8, $s10, $s11) or any of ($bc*)) or any of ($x*)
                 )
 }

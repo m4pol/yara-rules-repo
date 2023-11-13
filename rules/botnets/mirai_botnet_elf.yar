@@ -83,8 +83,8 @@ rule Mirai_Botnet_ELF_Unpacked {
                         00401c3b e8 00 1a        CALL       FUN_00403640
                                  00 00
                 */
-                $da1 = { 31 f6 bf ?? ?? ?? ?? 4? 8d b4 ?4 18 04 00 00 e8 48 1a 00 00 }
-                $da2 = { 31 f6 bf ?? ?? ?? ?? e8 ?? 1a 00 00 }
+                $bc1 = { 31 f6 bf ?? ?? ?? ?? 4? 8d b4 ?4 18 04 00 00 e8 48 1a 00 00 }
+                $bc2 = { 31 f6 bf ?? ?? ?? ?? e8 ?? 1a 00 00 }
 
                 /*
                         Another XOR argument passing to the possible loader function.
@@ -97,15 +97,15 @@ rule Mirai_Botnet_ELF_Unpacked {
                         004063de bf b7 0a        MOV        param_1=>s_x86_64_00410ab7, s_x86_64_00410ab7
                         004063e3 e8 48 3b        CALL       FUN_00409f30
                 */
-                $da3 = { 31 f6 bf ?? ?? ?? ?? e8 ?? 3b 00 00 }
+                $bc3 = { 31 f6 bf ?? ?? ?? ?? e8 ?? 3b 00 00 }
                 
-                $da4 = { 4? 89 fa be 98 16 41 00 } //HTTP Header initialize, from the possible loader function.
-                $da5 = { 66 c7 84 ?4 ?? 07 00 00 02 00 c7 04 ?4 ?? ?? ?? ?? } //Suspect IP Address argument passing.
-                $da6 = { 66 89 8c ?4 ?? 07 00 00 c7 04 ?4 ?? ?? ?? ?? } //Another Suspect IP Address argument passing.
+                $bc4 = { 4? 89 fa be 98 16 41 00 } //HTTP Header initialize, from the possible loader function.
+                $bc5 = { 66 c7 84 ?4 ?? 07 00 00 02 00 c7 04 ?4 ?? ?? ?? ?? } //Suspect IP Address argument passing.
+                $bc6 = { 66 89 8c ?4 ?? 07 00 00 c7 04 ?4 ?? ?? ?? ?? } //Another Suspect IP Address argument passing.
                 
         condition:
                 uint32(0) == 0x464C457F and filesize < 350KB and (
                         ($s3 and $s4 and $s5 and $s6 and $s7) or
-                        ((1 of ($s1, $s2) and $s8) or any of ($da*)) or any of ($x*)
+                        ((1 of ($s1, $s2) and $s8) or any of ($bc*)) or any of ($x*)
                 )
 }
