@@ -18,5 +18,5 @@ rule NjRAT_Backdoor_PE {
                 $bc6 = { 72 ?? ?? 0070 7E 1? 00 00 04 28 ?? 00 00 0A 17 6F 4? 00 00 0A 02 6F 4? 00 00 0A } //Delete Registry Value.
 
         condition:
-                (uint16(0) == 0x5A4D or $s1) and (($s2 or $s3 or $s4) or 2 of ($bc*))
+                uint16(0) == 0x5A4D and (any of ($s*) or 2 of ($bc*))
 }
