@@ -2,7 +2,7 @@ rule NjRAT_Backdoor_PE {
         meta:
                 description = "Use to detect NjRAT implant."
                 author = "Phatcharadol Thangplub"
-                date = "14-11-2023"
+                date = "02-01-2024"
 
         strings:
                 $s1 = "<requestedExecutionLevel level=\"asInvoker\" uiAccess=\"false\"/>" nocase
