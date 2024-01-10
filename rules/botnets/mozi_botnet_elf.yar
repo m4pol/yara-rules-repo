@@ -12,7 +12,7 @@ rule Mozi_Botnet_ELF_Packed {
                 $s4 = "mdebug._i32"
                 $s5 = "DEATH*"
                 $s6 = { 50 4f 53 54 20 2f 47 70 6f 6e 46 6f 72 6d 2f 64 69 61 67 ?? ?? ?? } //Mozi POST exploitation.
-                $s7 = { 68 74 74 bf fd f6 ff 70 3a 2f 2f 25 73 3a 25 64 2f 4d 6f ?? ?? ?? } //Pre Mozi Hosting Address.
+                $s7 = { 68 74 74 bf fd f6 ff 70 3a 2f 2f 25 73 3a 25 64 2f 4d 6f ?? ?? ?? } //Pre-Config of Mozi Hosting Address.
  
                 $x1 = "$Info: This file is packed with the UPX executable packer" nocase
                 $x2 = "UPX!" nocase
