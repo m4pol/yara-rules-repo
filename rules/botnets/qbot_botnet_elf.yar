@@ -3,7 +3,7 @@ rule Qbot_Botnet_ELF {
                 description = "Use to detect qbot/gafgyt/bashlite botnet, and there variants."
                 author = "Phatcharadol Thangplub"
                 date = "13-08-2023"
-                update = "28-09-2023"
+                update = "10-01-2024"
 
         strings:
                 $s1 = "mainCommSock" nocase

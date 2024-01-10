@@ -3,6 +3,7 @@ rule Mozi_Botnet_ELF_Packed {
                 description = "Use to detect packed Mozi botnet."
                 author = "Phatcharadol Thangplub"
                 date = "14-08-2023"
+                update = "10-01-2024"
 
         strings:
                 $s1 = "C9necti"
@@ -10,12 +11,12 @@ rule Mozi_Botnet_ELF_Packed {
                 $s3 = "?!ctrlt/De"
                 $s4 = "mdebug._i32"
                 $s5 = "DEATH*"
-                $s6 = { 50 4f 53 54 20 2f 47 70 6f 6e 46 6f 72 6d 2f 64 69 61 67 ?? ?? ?? }
-                $s7 = { 68 74 74 bf fd f6 ff 70 3a 2f 2f 25 73 3a 25 64 2f 4d 6f ?? ?? ?? }
-
+                $s6 = { 50 4f 53 54 20 2f 47 70 6f 6e 46 6f 72 6d 2f 64 69 61 67 ?? ?? ?? } //Mozi POST exploitation.
+                $s7 = { 68 74 74 bf fd f6 ff 70 3a 2f 2f 25 73 3a 25 64 2f 4d 6f ?? ?? ?? } //Pre Mozi Hosting Address.
+ 
                 $x1 = "$Info: This file is packed with the UPX executable packer" nocase
                 $x2 = "UPX!" nocase
-                $x3 = { ?? 2f 70 72 6f 63 2f 73 65 6c 66 2f 65 78 65 ?? } 
+                $x3 = { ?? 2f 70 72 6f 63 2f 73 65 6c 66 2f 65 78 65 ?? } //Part of UPX.
 
         condition:
                 uint32(0) == 0x464C457F and filesize < 250KB and 3 of ($s*) and 2 of ($x*)
@@ -26,7 +27,7 @@ rule Mozi_Botnet_ELF_Unpacked {
                 description = "Use to detect unpacked Mozi botnet."
                 author = "Phatcharadol Thangplub"
                 date = "14-08-2023"
-                update = "28-09-2023"
+                update = "10-01-2024"
                 unpack_tool = "https://github.com/kn0wl3dge/mozitools"
 
         strings:
@@ -39,8 +40,8 @@ rule Mozi_Botnet_ELF_Unpacked {
                 $s7 = "#user" nocase
                 $s8 = "http://%s:%d"
                 $s9 = "!Login"
-                $s10 = { 6b 69 6c 6c 61 6c 6c 20 2d 39 20 ?? ?? ?? }
-                $s11 = { ?? 4d 6f 7a 69 ?? ?? }
+                $s10 = { 6b 69 6c 6c 61 6c 6c 20 2d 39 20 ?? ?? ?? } //Part of Mozi infection command.
+                $s11 = { ?? 4d 6f 7a 69 ?? ?? } //Mozi botnet identify.
 
                 $x1 = "%08X%08X%08X%08X%08X%08X" fullword ascii
                 $x2 = "%19s%lx%lx%X%d%d%d%lx%d%d%d" fullword ascii

@@ -3,9 +3,10 @@ rule PerlBot_Botnet_Perl_Script {
                 description = "Use to detect Perl based IRC botnet."
                 author = "Phatcharadol Thangplub"
                 date = "19-08-2023"
+                update = "10-01-2024"
 
         strings:
-                $perl_sig = { 23 21 2f 75 73 72 2f 62 69 6e 2f 70 65 72 6c ?? }
+                $perl_sig = { 23 21 2f 75 73 72 2f 62 69 6e 2f 70 65 72 6c ?? } //Header declared of Perl Script.
 
                 $func1 = "sub getstore ($$)"
                 $func2 = "sub _get"

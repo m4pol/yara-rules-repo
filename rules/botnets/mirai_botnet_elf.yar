@@ -3,17 +3,19 @@ rule Mirai_Botnet_ELF_Packed {
                 description = "Use to detect packed mirai, and there variants."
                 author = "Phatcharadol Thangplub"
                 date = "14-08-2023"
+                update = "10-01-2024"
+                ssdp_attack = "https://www.netscout.com/sites/default/files/asert-blog/uploads/2018/06/ssdp_diffraction.pdf"
 
         strings:
                 $s1 = "SNQUERY"
                 $s2 = "RVSPUWVS"
-                $s3 = { ?? ?? ?? 76 72 40 4d 2d 53 45 41 52 43 48 20 2a 20 48 54 54 50 da 9b e1 cd ?? ?? }
-                $s4 = { ?? 58 50 3b }
-                $s5 = { ba 85 09 54 65 61 6d 53 70 08 ?? }
+                $s3 = { ?? ?? ?? 76 72 40 4d 2d 53 45 41 52 43 48 20 2a 20 48 54 54 50 da 9b e1 cd ?? ?? } //UPNP Header.
+                $s4 = { ?? 58 50 3b } //Part of Windows XP.
+                $s5 = { ba 85 09 54 65 61 6d 53 70 08 ?? } //Part of TeamSpeak.
 
                 $x1 = "$Info: This file is packed with the UPX executable packer" nocase
                 $x2 = "UPX!" nocase
-                $x3 = { ?? 2f 70 72 6f 63 2f 73 65 6c 66 2f 65 78 65 ?? } 
+                $x3 = { ?? 2f 70 72 6f 63 2f 73 65 6c 66 2f 65 78 65 ?? } //Part of UPX.
 
         condition:
                uint32(0) == 0x464C457F and filesize < 200KB and 2 of ($s*) and 2 of ($x*)
@@ -24,7 +26,8 @@ rule Mirai_Botnet_ELF_Unpacked {
                 description = "Use to detect unpacked mirai, and there variants."
                 author = "Phatcharadol Thangplub"
                 date = "13-08-2023"
-                update = "28-09-2023"
+                update = "10-01-2024"
+                ssdp_attack = "https://www.netscout.com/sites/default/files/asert-blog/uploads/2018/06/ssdp_diffraction.pdf"
 
         strings:
                 $s1 = ".mdebug.abi32" nocase
@@ -32,9 +35,9 @@ rule Mirai_Botnet_ELF_Unpacked {
                 $s3 = "M-SEARCH * HTTP/1.1"
                 $s4 = "nickname"
                 $s5 = "Windows XP"
-                $s6 = { ?? 54 65 61 6d 53 70 65 61 6b }
-                $s7 = { ?? ?? ?? ?? 3a 20 ?? ?? ?? 2e 32 35 35 2e 32 35 35 2e ?? ?? ?? 3a 31 39 30 30 }
-                $s8 = { 51 51 6a ?? 50 }
+                $s6 = { ?? 54 65 61 6d 53 70 65 61 6b } //Part of TeamSpeak.
+                $s7 = { ?? ?? ?? ?? 3a 20 ?? ?? ?? 2e 32 35 35 2e 32 35 35 2e ?? ?? ?? 3a 31 39 30 30 } //UPNP Host Address.
+                $s8 = { 51 51 6a ?? 50 } //Random unique string.
 
                 $x1 = "\"3DUfw"
                 $x2 = "FLOODING TCP"
@@ -51,13 +54,13 @@ rule Mirai_Botnet_ELF_Unpacked {
                 $x13 = "attack_tcp.c"
                 $x14 = "attack_udp.c"
                 $x15 = "killer.c"
-                $x16 = { 2F 62 69 6E 2F 63 ?? 6E 64 69 }
-                $x17 = { 5B 62 6F 74 70 6B 74 5D 20 ?? ?? ?? ?? }
-                $x18 = { 5B 45 52 52 4F 52 5D 20 ?? ?? ?? ?? }
-                $x19 = { 5B 6B 69 6C 6C 65 72 5D ?? ?? ?? ?? }
-                $x20 = { 50 4D 4D 56 ?? }
-                $x21 = { 73 75 63 6b 6d 61 64 69 63 6b }
-                $x22 = { 49 57 69 6c 6c 4e 75 6c 6c 59 6f 75 72 54 6f 61 73 74 65 72 }
+                $x16 = { 2F 62 69 6E 2F 63 ?? 6E 64 69 } //Condi botnet path.
+                $x17 = { 5B 62 6F 74 70 6B 74 5D 20 ?? ?? ?? ?? } //Command Report 1.
+                $x18 = { 5B 45 52 52 4F 52 5D 20 ?? ?? ?? ?? } //Command Report 2.
+                $x19 = { 5B 6B 69 6C 6C 65 72 5D ?? ?? ?? ?? } //Command Report 3.
+                $x20 = { 50 4D 4D 56 ?? } //Random unique string.
+                $x21 = { 73 75 63 6b 6d 61 64 69 63 6b } //Bad words 1.
+                $x22 = { 49 57 69 6c 6c 4e 75 6c 6c 59 6f 75 72 54 6f 61 73 74 65 72 } //Bad words 2.
                 
                 /*
                         XOR argument passing to the possible loader function.
