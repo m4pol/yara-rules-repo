@@ -4,7 +4,7 @@ rule Mirai_Botnet_ELF_Packed {
                 author = "Phatcharadol Thangplub"
                 date = "14-08-2023"
                 update = "10-01-2024"
-                ssdp_attack = "https://www.netscout.com/sites/default/files/asert-blog/uploads/2018/06/ssdp_diffraction.pdf"
+                ssdp_attack_reference = "https://www.netscout.com/sites/default/files/asert-blog/uploads/2018/06/ssdp_diffraction.pdf"
 
         strings:
                 $s1 = "SNQUERY"
@@ -27,7 +27,7 @@ rule Mirai_Botnet_ELF_Unpacked {
                 author = "Phatcharadol Thangplub"
                 date = "13-08-2023"
                 update = "10-01-2024"
-                ssdp_attack = "https://www.netscout.com/sites/default/files/asert-blog/uploads/2018/06/ssdp_diffraction.pdf"
+                ssdp_attack_reference = "https://www.netscout.com/sites/default/files/asert-blog/uploads/2018/06/ssdp_diffraction.pdf"
 
         strings:
                 $s1 = ".mdebug.abi32" nocase
