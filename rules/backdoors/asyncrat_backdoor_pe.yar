@@ -3,6 +3,7 @@ rule AsyncRAT_Backdoor_PE {
                 description = "Use to detect AsyncRAT implant."
                 author = "Phatcharadol Thangplub"
                 date = "12-11-2023"
+                update = "11-02-2024"
 
         strings:
                 $s1 = "Pac_ket"
@@ -19,5 +20,5 @@ rule AsyncRAT_Backdoor_PE {
                 $bc7 = { 28 67 00 00 0A 72 ?? 13 00 70 28 1C 00 00 0A 6F 1D 00 00 0A 0? 12 0? 28 2C 00 00 06 } //Load amsi.dll, and get AmsiScanBuffer function process.
 
         condition:
-                uint16(0) == 0x5A4D and (any of ($s*) or 3 of ($bc*))
+                uint16(0) == 0x5A4D and any of ($s*) or 5 of ($bc*)
 }
