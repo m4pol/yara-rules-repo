@@ -1,24 +1,26 @@
+import "elf"
+
 rule Mirai_Botnet_ELF_Packed {
         meta:
                 description = "Use to detect packed mirai, and there variants."
                 author = "Phatcharadol Thangplub"
                 date = "14-08-2023"
-                update = "10-01-2024"
+                update = "21-02-2024"
                 ssdp_attack_reference = "https://www.netscout.com/sites/default/files/asert-blog/uploads/2018/06/ssdp_diffraction.pdf"
 
         strings:
-                $s1 = "SNQUERY"
-                $s2 = "RVSPUWVS"
+                $s1 = "SNQUERY" //Unique string.
+                $s2 = "RVSPUWVS" //Unique string.
                 $s3 = { ?? ?? ?? 76 72 40 4d 2d 53 45 41 52 43 48 20 2a 20 48 54 54 50 da 9b e1 cd ?? ?? } //UPNP Header.
-                $s4 = { ?? 58 50 3b } //Part of Windows XP.
-                $s5 = { ba 85 09 54 65 61 6d 53 70 08 ?? } //Part of TeamSpeak.
+                $s4 = { ?? 58 50 3b } //Windows XP artifact.
+                $s5 = { ba 85 09 54 65 61 6d 53 70 08 ?? } //TeamSpeak artifact.
 
-                $x1 = "$Info: This file is packed with the UPX executable packer" nocase
-                $x2 = "UPX!" nocase
-                $x3 = { ?? 2f 70 72 6f 63 2f 73 65 6c 66 2f 65 78 65 ?? } //Part of UPX.
+                $upx1 = "$Info: This file is packed with the UPX executable packer" nocase
+                $upx2 = "UPX!" nocase
+                $upx3 = "/proc/self/exe" nocase //UPX packer artifact.
 
         condition:
-               uint32(0) == 0x464C457F and filesize < 200KB and 2 of ($s*) and 2 of ($x*)
+               uint32(0) == 0x464C457F and filesize < 200KB and 2 of ($s*) and 2 of ($upx*)
 }
 
 rule Mirai_Botnet_ELF_Unpacked {
@@ -26,7 +28,7 @@ rule Mirai_Botnet_ELF_Unpacked {
                 description = "Use to detect unpacked mirai, and there variants."
                 author = "Phatcharadol Thangplub"
                 date = "13-08-2023"
-                update = "10-01-2024"
+                update = "21-02-2024"
                 ssdp_attack_reference = "https://www.netscout.com/sites/default/files/asert-blog/uploads/2018/06/ssdp_diffraction.pdf"
 
         strings:
@@ -37,30 +39,28 @@ rule Mirai_Botnet_ELF_Unpacked {
                 $s5 = "Windows XP"
                 $s6 = { ?? 54 65 61 6d 53 70 65 61 6b } //Part of TeamSpeak.
                 $s7 = { ?? ?? ?? ?? 3a 20 ?? ?? ?? 2e 32 35 35 2e 32 35 35 2e ?? ?? ?? 3a 31 39 30 30 } //UPNP Host Address.
-                $s8 = { 51 51 6a ?? 50 } //Random unique string.
+                $s8 = { 51 51 6a ?? 50 } //Unique string.
 
-                $x1 = "\"3DUfw"
-                $x2 = "FLOODING TCP"
-                $x3 = "FLOODING GTCP"
-                $x4 = "FLOODING GRE"
-                $x5 = "CNC connection timed out!"
-                $x6 = "connection initialized to cnc!"
-                $x7 = "boat: applet not found"
-                $x8 = "%*d %*s %*c %d" nocase
-                $x9 = "condi2 %s:%d" nocase
-                $x10 = "/tmp/updateproc" nocase
-                $x11 = /\/*\/condi/ nocase
-                $x12 = "attack.c"
-                $x13 = "attack_tcp.c"
-                $x14 = "attack_udp.c"
-                $x15 = "killer.c"
-                $x16 = { 2F 62 69 6E 2F 63 ?? 6E 64 69 } //Condi botnet path.
-                $x17 = { 5B 62 6F 74 70 6B 74 5D 20 ?? ?? ?? ?? } //Command Report 1.
-                $x18 = { 5B 45 52 52 4F 52 5D 20 ?? ?? ?? ?? } //Command Report 2.
-                $x19 = { 5B 6B 69 6C 6C 65 72 5D ?? ?? ?? ?? } //Command Report 3.
-                $x20 = { 50 4D 4D 56 ?? } //Random unique string.
-                $x21 = { 73 75 63 6b 6d 61 64 69 63 6b } //Bad words 1.
-                $x22 = { 49 57 69 6c 6c 4e 75 6c 6c 59 6f 75 72 54 6f 61 73 74 65 72 } //Bad words 2.
+                $variant1 = "\"3DUfw"
+                $variant2 = "FLOODING TCP"
+                $variant3 = "FLOODING GTCP"
+                $variant4 = "FLOODING GRE"
+                $variant5 = "CNC connection timed out!"
+                $variant6 = "connection initialized to cnc!"
+                $variant7 = "boat: applet not found"
+                $variant8 = "%*d %*s %*c %d" nocase
+                $variant9 = "condi2 %s:%d" nocase
+                $variant10 = "/tmp/updateproc" nocase
+                $variant11 = /\/*\/condi/ nocase
+                $variant12 = "attack.c"
+                $variant13 = "attack_tcp.c"
+                $variant14 = "attack_udp.c"
+                $variant15 = "killer.c"
+                $variant16 = { 2F 62 69 6E 2F 63 ?? 6E 64 69 } //Condi botnet path.
+                $variant17 = { 5B 62 6F 74 70 6B 74 5D 20 ?? ?? ?? ?? } //Server Command Report 1.
+                $variant18 = { 5B 45 52 52 4F 52 5D 20 ?? ?? ?? ?? } //Server Command Report 2.
+                $variant19 = { 5B 6B 69 6C 6C 65 72 5D ?? ?? ?? ?? } //Server Command Report 3.
+                $variant20 = { 50 4D 4D 56 ?? } //Unique string.
                 
                 /*
                         XOR argument passing to the possible loader function.
@@ -86,8 +86,8 @@ rule Mirai_Botnet_ELF_Unpacked {
                         00401c3b e8 00 1a        CALL       FUN_00403640
                                  00 00
                 */
-                $bc1 = { 31 f6 bf ?? ?? ?? ?? 4? 8d b4 ?4 18 04 00 00 e8 48 1a 00 00 }
-                $bc2 = { 31 f6 bf ?? ?? ?? ?? e8 ?? 1a 00 00 }
+                $bytecode1 = { 31 f6 bf ?? ?? ?? ?? 4? 8d b4 ?4 18 04 00 00 e8 48 1a 00 00 }
+                $bytecode2 = { 31 f6 bf ?? ?? ?? ?? e8 ?? 1a 00 00 }
 
                 /*
                         Another XOR argument passing to the possible loader function.
@@ -100,15 +100,15 @@ rule Mirai_Botnet_ELF_Unpacked {
                         004063de bf b7 0a        MOV        param_1=>s_x86_64_00410ab7, s_x86_64_00410ab7
                         004063e3 e8 48 3b        CALL       FUN_00409f30
                 */
-                $bc3 = { 31 f6 bf ?? ?? ?? ?? e8 ?? 3b 00 00 }
+                $bytecode3 = { 31 f6 bf ?? ?? ?? ?? e8 ?? 3b 00 00 }
                 
-                $bc4 = { 4? 89 fa be 98 16 41 00 } //HTTP Header initialize, from the possible loader function.
-                $bc5 = { 66 c7 84 ?4 ?? 07 00 00 02 00 c7 04 ?4 ?? ?? ?? ?? } //Suspect IP Address argument passing.
-                $bc6 = { 66 89 8c ?4 ?? 07 00 00 c7 04 ?4 ?? ?? ?? ?? } //Another Suspect IP Address argument passing.
+                $bytecode4 = { 4? 89 fa be 98 16 41 00 } //HTTP Header initialize, from the possible loader function.
+                $bytecode5 = { 66 c7 84 ?4 ?? 07 00 00 02 00 c7 04 ?4 ?? ?? ?? ?? } //Suspect IP Address argument passing.
+                $bytecode6 = { 66 89 8c ?4 ?? 07 00 00 c7 04 ?4 ?? ?? ?? ?? } //Another Suspect IP Address argument passing.
                 
         condition:
                 uint32(0) == 0x464C457F and filesize < 350KB and (
                         ($s3 and $s4 and $s5 and $s6 and $s7) or
-                        ((1 of ($s1, $s2) and $s8) or any of ($bc*)) or any of ($x*)
+                        ((1 of ($s1, $s2) and $s8) or any of ($bytecode*)) or any of ($variant*)
                 )
 }

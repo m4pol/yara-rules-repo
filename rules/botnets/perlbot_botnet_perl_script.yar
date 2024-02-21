@@ -3,10 +3,10 @@ rule PerlBot_Botnet_Perl_Script {
                 description = "Use to detect Perl based IRC botnet."
                 author = "Phatcharadol Thangplub"
                 date = "19-08-2023"
-                update = "10-01-2024"
+                update = "21-02-2024"
 
         strings:
-                $perl_sig = { 23 21 2f 75 73 72 2f 62 69 6e 2f 70 65 72 6c ?? } //Header declared of Perl Script.
+                $perl_sig = "#!/usr/bin/perl" //Header declared of Perl Script.
 
                 $func1 = "sub getstore ($$)"
                 $func2 = "sub _get"
@@ -29,15 +29,15 @@ rule PerlBot_Botnet_Perl_Script {
                 $s6 = "($funcarg =~ /^ctcpflood (.*)/)"
                 $s7 = "sendraw($IRC_cur_socket, \"PRIVMSG $printl :$linha\");"
 
-                $x1 = "sub attacker" nocase
-                $x2 = "$shell = \"cmd.exe\";"
-                $x3 = "($^O eq \"MSWin32\")"
-                $x4 = "my $shell = \"/bin/sh -i\";"
-                $x5 = "sub tcpflooder" nocase
+                $variant1 = "sub attacker" nocase
+                $variant2 = "$shell = \"cmd.exe\";"
+                $variant3 = "($^O eq \"MSWin32\")"
+                $variant4 = "my $shell = \"/bin/sh -i\";"
+                $variant5 = "sub tcpflooder" nocase
 
         condition:
                 filesize < 250KB and $perl_sig and (
                         4 of ($func1, $func2, $func3, $func4, $func5, $func6, $func7) and
-                        ($func8 or $func9 or $func10 or $func11 or $func12) and 4 of ($s*) and any of ($x*)
+                        ($func8 or $func9 or $func10 or $func11 or $func12) and 4 of ($s*) and any of ($variant*)
                 )
 }
