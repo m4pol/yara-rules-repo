@@ -3,7 +3,7 @@ rule Mozi_Botnet_ELF_Packed {
                 description = "Use to detect packed Mozi botnet."
                 author = "Phatcharadol Thangplub"
                 date = "14-08-2023"
-                update = "21-02-2024"
+                update = "28-02-2024"
 
         strings:
                 $s1 = "C9necti"
@@ -16,7 +16,7 @@ rule Mozi_Botnet_ELF_Packed {
  
                 $upx1 = "$Info: This file is packed with the UPX executable packer" nocase
                 $upx2 = "UPX!" nocase
-                $upx3 = { ?? 2f 70 72 6f 63 2f 73 65 6c 66 2f 65 78 65 ?? } //Part of UPX.
+                $upx3 = "/proc/self/exe" nocase
 
         condition:
                 uint32(0) == 0x464C457F and filesize < 250KB and 3 of ($s*) and 2 of ($upx*)
@@ -27,7 +27,7 @@ rule Mozi_Botnet_ELF_Unpacked {
                 description = "Use to detect unpacked Mozi botnet."
                 author = "Phatcharadol Thangplub"
                 date = "14-08-2023"
-                update = "21-02-2024"
+                update = "28-02-2024"
                 unpack_tool = "https://github.com/kn0wl3dge/mozitools"
 
         strings:

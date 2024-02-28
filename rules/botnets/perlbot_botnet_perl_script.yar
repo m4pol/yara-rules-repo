@@ -3,10 +3,10 @@ rule PerlBot_Botnet_Perl_Script {
                 description = "Use to detect Perl based IRC botnet."
                 author = "Phatcharadol Thangplub"
                 date = "19-08-2023"
-                update = "21-02-2024"
+                update = "28-02-2024"
 
         strings:
-                $perl_sig = "#!/usr/bin/perl" //Header declared of Perl Script.
+                $perl_sig = "#!/usr/bin/perl"
 
                 $func1 = "sub getstore ($$)"
                 $func2 = "sub _get"
