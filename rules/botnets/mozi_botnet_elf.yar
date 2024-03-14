@@ -1,55 +1,27 @@
-rule Mozi_Botnet_ELF_Packed {
+rule Mozi_Botnet_ELF {
         meta:
-                description = "Use to detect packed Mozi botnet."
+                description = "Use to detect Mozi botnet."
                 author = "Phatcharadol Thangplub"
-                date = "14-08-2023"
-                update = "28-02-2024"
+                date = "15-03-2024"
 
         strings:
-                $s1 = "C9necti"
-                $s2 = "M7c.xml" 
-                $s3 = "?!ctrlt/De"
-                $s4 = "mdebug._i32"
-                $s5 = "DEATH*"
-                $s6 = { 50 4f 53 54 20 2f 47 70 6f 6e 46 6f 72 6d 2f 64 69 61 67 ?? ?? ?? } //Mozi POST exploitation.
-                $s7 = { 68 74 74 bf fd f6 ff 70 3a 2f 2f 25 73 3a 25 64 2f 4d 6f ?? ?? ?? } //Pre-Config of Mozi Hosting Address.
- 
-                $upx1 = "$Info: This file is packed with the UPX executable packer" nocase
-                $upx2 = "UPX!" nocase
-                $upx3 = "/proc/self/exe" nocase
+                $s1 = "%08X%08X%08X%08X%08X%08X"
+                $s2 = "%19s%lx%lx%X%d%d%d%lx%d%d%d"
+                $s3 = "1(765$`j4p(dmn'b75e-gjk=-9c44`e-gjk(86>5%)zfhc<c,a57s)ali*~bne>4%)ziw?lt,a57s)ali*ah,iw?7$g`lj&6!g*aht,oe?7?:-656)370+0$mh"
+                $s4 = "GET /Mozi"
+                $s5 = "killall -9 telnetd utelnetd scfgmgr"
+                $s6 = "acsMozi"
 
-        condition:
-                uint32(0) == 0x464C457F and filesize < 250KB and 3 of ($s*) and 2 of ($upx*)
-}
-
-rule Mozi_Botnet_ELF_Unpacked {
-        meta:
-                description = "Use to detect unpacked Mozi botnet."
-                author = "Phatcharadol Thangplub"
-                date = "14-08-2023"
-                update = "28-02-2024"
-                unpack_tool = "https://github.com/kn0wl3dge/mozitools"
-
-        strings:
-                $s1 = "This node doesn't accept announces" nocase
-                $s2 = "[set]" nocase
-                $s3 = "[cnc]" nocase
-                $s4 = "[idp]" nocase
-                $s5 = "[cpu]" nocase
-                $s6 = "linuxshell" nocase
-                $s7 = "#user" nocase
-                $s8 = "http://%s:%d"
-                $s9 = "!Login"
-                $s10 = { 6b 69 6c 6c 61 6c 6c 20 2d 39 20 ?? ?? ?? } //Part of Mozi infection command.
-                $s11 = { ?? 4d 6f 7a 69 ?? ?? } //Mozi botnet identify.
-
-                $variant1 = "%08X%08X%08X%08X%08X%08X" fullword ascii
-                $variant2 = "%19s%lx%lx%X%d%d%d%lx%d%d%d" fullword ascii
-                $variant3 = "1(765$`j4p(dmn'b75e-gjk=-9c44`e-gjk(86>5%)zfhc<c,a57s)ali*~bne>4%)ziw?lt,a57s)ali*ah,iw?7$g`lj&6!g*aht,oe?7?:-656)370+0$mh" fullword ascii
+                /*
+                        Related path binding.
+                */
+                $hex1 = { 30 40 2d e9 ?? c? 9f e5 2c d0 4d e2 0c e0 a0 e1 0f 00 b? e8 04 50 8d e2 05 c0 a0 e1 0f 00 a? e8 0f 00 b? e8 0f 00 a? e8 [2] 9? e5 [2] 8? e5 00 40 a0 e3 } //ARM
                 
+                /*
+                        Infection line argument.
+                */
+                $hex2 = { 0e 00 54 e1 ?? c? 9f e5 ?? 4? 9f e5 01 c0 a0 01 8e 21 95 e7 [2] 9f e5 } //ARM
+
         condition:
-                uint32(0) == 0x464C457F and filesize < 400KB and (
-                        ($s1 or ($s2 and $s3 and $s4 and $s5)) or 1 of ($s6, $s7, $s8) and
-                        ($s9 and $s10 and $s11) or any of ($variant*)
-                )
+                uint32(0) == 0x464C457F and filesize <= 400KB and (all of ($s*) or all of ($hex*))
 }

@@ -1,12 +1,12 @@
 Botnet Patterns:
-- Qbot / Gafgyt / Bashlite
-- Kaiten / Tsunami
+- Gafgyt
+- Kaiten
 - Mozi
 - Mirai
 - Perl IRC botnet
   
 Backdoor Patterns:
-- AsyncRAT / DcRAT
+- AsyncRAT
 - NjRAT
 
-The collections of malware rules to perfrom malware threat hunting. Most of the sample that's use to do analysis and wrote the YARA rules is from abuse.ch, or the public source of it.
+The collection of malware signatures to perfrom malware threat hunting, or detection. Most of the sample that's use to do analysis and wrote the YARA rules is from Abuse.ch, or the public source of it.
