@@ -2,23 +2,17 @@ rule NjRAT_Backdoor_PE {
         meta:
                 description = "Use to detect NjRAT implant."
                 author = "Phatcharadol Thangplub"
-                date = "14-11-2023"
-                update = "21-02-2024"
+                date = "16-03-2024"
 
         strings:
-                $s1 = "<requestedExecutionLevel level=\"asInvoker\" uiAccess=\"false\"/>" nocase
-                $s2 = "GetKeyboardState" nocase
-                $s3 = "capGetDriverDescriptionA" nocase
-                $s4 = "CompDir" nocase
-                $s5 = /\/*\/& del/ nocase
-                $s6 = "[ENTER]" nocase
-                $s7 = "[TAB]" nocase
-                $s8 = "https://dl.dropbox.com/s/p84aaz28t0hepul/Pass.exe?dl=0"
+                $s1 = "GetKeyboardState"
+                $s2 = "capGetDriverDescriptionA"
+                $s3 = "CompDir"
 
-                $bytecode1 = { 72 ?? 0? 00 70 80 ?? 00 00 04 } //Primary varible initialize.
-                $bytecode2 = { 6F E5 00 00 0A 6F 31 00 00 0A 72 ?? 0D 00 70 16 28 32 00 00 0A } //Compare the process name.
-                $bytecode3 = { 72 ?? ?? 00 70 7E 1? 00 00 04 28 ?? 00 00 0A 17 6F 4? 00 00 0A 02 6F 4? 00 00 0A } //Delete Registry Value.
+                $hex1 = { 08 6F [4] 6F [4] 72 [4] 16 28 [4] 16 FE 01 } //Compare the process in protect function.
+                $hex2 = { 7E [4] 6F [4] 6F [4] 7E [4] 17 6F [4] 7E [4] 16 6F [4] 00 } //Delete Registry Value.
+                $hex3 = { 72 [4] 7E [4] 6F [4] 72 [4] 28 [4] 16 16 15 28 [4] 26 } //Execute shell commands.
 
         condition:
-                uint16(0) == 0x5A4D and any of ($s*) and all of ($bytecode*)
+                uint16(0) == 0x5A4D and filesize >= 20KB and (any of ($s*) and any of ($hex*))
 }
