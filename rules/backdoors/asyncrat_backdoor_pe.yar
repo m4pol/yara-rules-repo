@@ -17,7 +17,7 @@ rule AsyncRAT_Backdoor_PE {
                 $hex1 = { 28 [4] 72 [4] 28 [4] 6F [4] 0A 12 ?? 28 [4] 28 [4] 72 [4] 28 [4] 6F [4] 0B 12 ?? 28 [4] 0C 7E [4] 08 02 8E 69 6A 28 [4] 1F [1] 12 ?? 6F [4] 26 02 16 08 02 8E 69 28 }
 
                 /*
-                        Pattern of the PatchA function call.
+                        Pattern of the PatchA function.
                 */
                 $hex2 = { 72 [4] 0A 06 72 [4] 28 [4] 0A 72 [4] 0B 07 72 [4] 28 [4] 0B 28 [4] 39 [4] 06 28 [4] 28 [4] 2A 07 28 [4] 28 [4] 2A }
 
@@ -28,7 +28,7 @@ rule AsyncRAT_Backdoor_PE {
                 $hex4 = { 06 07 6F [4] 17 73 [4] 0C 06 07 6F [4] 16 07 6F [4] 8E 69 6F [4] 08 03 16 03 8E 69 6F [4] 08 6F [4] 02 7B [4] 73 [4] 0D 09 06 6F [4] 1F ?? 06 6F [4] 8E 69 1F ?? 59 6F [4] 13 ?? 06 16 6A 6F [4] 06 11 ?? 16 11 ?? 8E 69 6F }
 
                 /*
-                        Pattern of the PreventSleep function call.
+                        Pattern of the PreventSleep function.
                 */
                 $hex5 = { 20 [4] 28 [4] 26 DD }
 
