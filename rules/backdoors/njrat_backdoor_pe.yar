@@ -7,9 +7,9 @@ rule NjRAT_Backdoor_PE {
         strings:
                 $s1 = "GetKeyboardState"
                 $s2 = "capGetDriverDescriptionA"
-                $s4 = "[ENTER]" fullword wide
-                $s5 = "[TAP]" fullword wide
-                $s6 = "|'|'|" fullword wide
+                $s3 = "[ENTER]" fullword wide
+                $s4 = "[TAP]" fullword wide
+                $s5 = "|'|'|" fullword wide
 
                 /*
                         Pattern of compare the process to kill it later, in protect function.
