@@ -2,23 +2,36 @@ rule AsyncRAT_Backdoor_PE {
         meta:
                 description = "Use to detect AsyncRAT implant."
                 author = "Phatcharadol Thangplub"
-                date = "12-11-2023"
-                update = "21-02-2024"
+                date = "17-03-2024"
 
         strings:
-                $s1 = "Pac_ket"
-                $s2 = "Po_ng"
-                $s3 = "plu_gin"
-                $s4 = "save_Plugin"
+                $s1 = "Select * from AntivirusProduct" fullword wide
+                $s2 = "/c schtasks /create /f /sc onlogon /rl highest /tn" fullword wide
+                $s3 = "QW1zaVNjYW5CdWZmZXI=" fullword wide
+                $s4 = "YW1zaS5kbGw=" fullword wide
+                $s5 = "SbieDll.dll" fullword wide
 
-                $bytecode1 = { 72 ?? ?? ?? 70 80 05 00 00 04 } //Install folder varible initialize.
-                $bytecode2 = { 28 35 00 00 06 } //Registry Persistence function call.
-                $bytecode3 = { 28 45 00 00 06 } //Anti Analysis function call.
-                $bytecode4 = { 09 72 ?? ?? ?? 70 28 3C 00 00 06 39 06 00 00 00 } //Check for anti process.
-                $bytecode5 = { 28 3D 00 00 06 } //Process Killer function call.
-                $bytecode6 = { 28 28 00 00 06 } //AMSI Bypass function call.
-                $bytecode7 = { 28 67 00 00 0A 72 ?? 13 00 70 28 1C 00 00 0A 6F 1D 00 00 0A 0? 12 0? 28 2C 00 00 06 } //Load amsi.dll, and get AmsiScanBuffer function process.
+                /*
+                        Load amsi.dll, get AmsiScanBuffer process address and allocate it in the memory.
+                */
+                $hex1 = { 28 [4] 72 [4] 28 [4] 6F [4] 0A 12 ?? 28 [4] 28 [4] 72 [4] 28 [4] 6F [4] 0B 12 ?? 28 [4] 0C 7E [4] 08 02 8E 69 6A 28 [4] 1F [1] 12 ?? 6F [4] 26 02 16 08 02 8E 69 28 }
+
+                /*
+                        Pattern of the PatchA function call.
+                */
+                $hex2 = { 72 [4] 0A 06 72 [4] 28 [4] 0A 72 [4] 0B 07 72 [4] 28 [4] 0B 28 [4] 39 [4] 06 28 [4] 28 [4] 2A 07 28 [4] 28 [4] 2A }
+
+                /*
+                        Pattern of overload AES Encrypt function.
+                */
+                $hex3 = { 02 28 [4] 03 6F [4] 28 [4] 28 [4] 2A }
+                $hex4 = { 06 07 6F [4] 17 73 [4] 0C 06 07 6F [4] 16 07 6F [4] 8E 69 6F [4] 08 03 16 03 8E 69 6F [4] 08 6F [4] 02 7B [4] 73 [4] 0D 09 06 6F [4] 1F ?? 06 6F [4] 8E 69 1F ?? 59 6F [4] 13 ?? 06 16 6A 6F [4] 06 11 ?? 16 11 ?? 8E 69 6F }
+
+                /*
+                        Pattern of the PreventSleep function call.
+                */
+                $hex5 = { 20 [4] 28 [4] 26 DD }
 
         condition:
-                uint16(0) == 0x5A4D and any of ($s*) or 5 of ($bytecode*)
+                uint16(0) == 0x5A4D and filesize >= 40KB and (2 of ($s*) and (($hex1 and $hex2) or ($hex3 and $hex4)) and $hex5) 
 }
