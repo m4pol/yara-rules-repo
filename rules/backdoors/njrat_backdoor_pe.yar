@@ -7,9 +7,9 @@ rule NjRAT_Backdoor_PE {
         strings:
                 $s1 = "GetKeyboardState"
                 $s2 = "capGetDriverDescriptionA"
-                $s3 = "[ENTER]" fullword wide
-                $s4 = "[TAP]" fullword wide
-                $s5 = "|'|'|" fullword wide
+                $s4 = "[ENTER]" fullword wide
+                $s5 = "[TAP]" fullword wide
+                $s6 = "|'|'|" fullword wide
 
                 /*
                         Pattern of compare the process to kill it later, in protect function.
@@ -27,5 +27,6 @@ rule NjRAT_Backdoor_PE {
                 $hex3 = { 72 [4] 7E [4] 6F [4] 72 [4] 28 [4] 16 16 15 28 [4] 26 }
 
         condition:
-                uint16(0) == 0x5A4D and filesize >= 20KB and (2 of ($s*) and any of ($hex*))
+                uint16(0) == 0x5A4D and filesize >= 20KB and filesize <= 15MB and 
+                (any of ($s*) and any of ($hex*))
 }

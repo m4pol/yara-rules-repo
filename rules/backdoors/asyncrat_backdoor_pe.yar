@@ -33,5 +33,6 @@ rule AsyncRAT_Backdoor_PE {
                 $hex5 = { 20 [4] 28 [4] 26 DD }
 
         condition:
-                uint16(0) == 0x5A4D and filesize >= 40KB and (2 of ($s*) and (($hex1 and $hex2) or ($hex3 and $hex4)) and $hex5) 
+                uint16(0) == 0x5A4D and filesize >= 40KB and filesize <= 5MB and 
+                (2 of ($s*) and (($hex1 and $hex2) or ($hex3 and $hex4)) and $hex5) 
 }
