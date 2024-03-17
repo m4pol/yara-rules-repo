@@ -27,5 +27,5 @@ rule NjRAT_Backdoor_PE {
                 $hex3 = { 72 [4] 7E [4] 6F [4] 72 [4] 28 [4] 16 16 15 28 [4] 26 }
 
         condition:
-                uint16(0) == 0x5A4D and filesize >= 20KB and (any of ($s*) and any of ($hex*))
+                uint16(0) == 0x5A4D and filesize >= 20KB and (2 of ($s*) and any of ($hex*))
 }
