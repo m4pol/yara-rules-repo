@@ -38,5 +38,5 @@ rule Mal_WIN_AsyncRat_RAT_PE {
 
         condition:
                 uint16(0) == 0x5A4D and filesize >= 40KB and filesize <= 5MB and 
-                (2 of ($s*) and (($hex1 and $hex2) or ($hex3 and $hex4)) and $hex5) 
+                (any of ($s*) and (($hex1 and $hex2) or ($hex3 and $hex4)) and $hex5) 
 }
