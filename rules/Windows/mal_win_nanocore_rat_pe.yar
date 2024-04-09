@@ -2,7 +2,7 @@ rule Mal_WIN_NanoCore_RAT_PE  {
         meta:
                 description = "Use to detect NanoCore RAT implant."
                 author = "Phatcharadol Thangplub"
-                date = "11-04-2024"
+                date = "10-04-2024"
         
         strings:
                 $s1 = "ReadPacket []" fullword wide
