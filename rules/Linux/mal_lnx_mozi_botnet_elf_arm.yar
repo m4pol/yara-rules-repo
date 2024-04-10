@@ -15,7 +15,9 @@ rule Mal_LNX_Mozi_Botnet_ELF {
                 /*
                         Related path binding.
                 */
-                $hex1 = { 30 40 2d e9 ?? c? 9f e5 2c d0 4d e2 0c e0 a0 e1 0f 00 b? e8 04 50 8d e2 05 c0 a0 e1 0f 00 a? e8 0f 00 b? e8 0f 00 a? e8 [2] 9? e5 [2] 8? e5 00 40 a0 e3 } //ARM
+                $hex1 = { 30 40 2d e9 ?? c? 9f e5 2c d0 4d e2 0c e0 a0 e1 0f 00 b? e8 
+                        04 50 8d e2 05 c0 a0 e1 0f 00 a? e8 0f 00 b? e8 0f 00 a? e8 
+                        [2] 9? e5 [2] 8? e5 00 40 a0 e3 } //ARM
                 
                 /*
                         Infection line argument.
